@@ -11,8 +11,8 @@
           (if ent
               ;; If the entity is valid, apply colorization functions
               (progn
-                (c:kolor_zs ent)   ; Apply colorization based on xdata
-                (c:kolor_zss ent)  ; Apply colorization based on global width
+                (kolor_zs ent)   ; Apply colorization based on xdata
+                (kolor_zss ent)  ; Apply colorization based on global width
                 )
             )
           (setq i (1+ i))
@@ -24,7 +24,7 @@
   (princ)
   )
 
-(defun c:kolor_zs (ent / funkyProp propValue startPos endPos numberString name color)
+(defun kolor_zs (ent / funkyProp propValue startPos endPos numberString name color)
   ;; Get the property list for the "funky" property
   (setq funkyProp (cdadr (assoc -3 (entget ent '("funky")))))
   
@@ -44,26 +44,24 @@
         (setq diameter (/ (atof(substr propValue (+ startPos 3) (- endPos startPos 2))) 10))
         
         ;; Set color based on diameter value
-        (c:kolorowanie diameter)
+        (kolorowanie diameter)
         )
     )
   )
 
-(defun c:kolor_zss (ent / entdata diameter color)
+(defun kolor_zss (ent / entdata diameter color)
   ;; Get the entity data
   (setq entdata (entget ent))
   ;; Get the diameter from the entity data
   (setq diameter (cdr (assoc 43 entdata)))
   (if (and (numberp diameter) (/= diameter 0.0))
-      (progn
-        ;; If diameter is a valid number, apply colorization based on diameter
-        (c:kolorowanie diameter)
-        )
+      ;; If diameter is a valid number, apply colorization based on diameter
+      (kolorowanie diameter)
     )
   (princ)
   )
 
-(defun c:kolorowanie (diameter / color)
+(defun kolorowanie (diameter / color)
   ;; Set color based on diameter value
   ;; All atypical diameters are set as white
   (setq color (cond
